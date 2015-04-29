@@ -104,20 +104,26 @@ SearchPage = React.createClass({
           });
         }
 
-        this.props.navigator.push({
-          title: this.state.searchString + ' Listings',
-          component: Listings,
-          passProps: { listings }
-        });
-
-        this.setState(this.getDefaultState());
+        this.goToListings(listings);
       })
-      .catch(e => {
-        this.setState({
-          isLoading: false,
-          message: 'Something bad happened: ' + e
-        });
-      });
+      .catch(this.handleError);
+  },
+
+  goToListings: function (listings) {
+    this.props.navigator.push({
+      title: this.state.searchString + ' Listings',
+      component: Listings,
+      passProps: { listings }
+    });
+
+    this.setState(this.getDefaultState());
+  },
+
+  handleError: function(e) {
+    this.setState({
+      isLoading: false,
+      message: 'Something bad happened: ' + e
+    });
   },
 
   shouldComponentUpdate: function(nextProps, nextState) {
@@ -170,7 +176,10 @@ SearchPage = React.createClass({
             <Text style={styles.buttonText}>Go</Text>
           </TouchableHighlight>
         </View>
-        <TouchableHighlight style={styles.button} underlayColor='#99d9f4'>
+        <TouchableHighlight
+          style={styles.button}
+          underlayColor='#99d9f4'
+        >
           <Text style={styles.buttonText}>Location</Text>
         </TouchableHighlight>
         <Image source={require('image!house_xl')} style={styles.image}/>
